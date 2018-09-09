@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./signup.css";
 import { Link, withRouter } from "react-router-dom";
 import * as routes from "../../Constants/routes";
-import { auth, db } from "../../Firebase";
+import { firebase, auth, db } from "../../Firebase";
 
 const INITIAL_STATE = {
   username: "",
@@ -12,10 +12,10 @@ const INITIAL_STATE = {
 };
 
 const SignUpPage = ({ history }) => (
-  <div class="container-fluid">
-    <div class="login-form">
-      <div class="main-div">
-        <div class="panel">
+  <div className="container-fluid">
+    <div className="login-form">
+      <div className="main-div">
+        <div className="panel">
           <p>Please provide the below details</p>
         </div>
         <Signup history={history} />
@@ -41,8 +41,10 @@ class Signup extends Component {
 
     auth
       .doCreateUserWithEmailAndPassword(email, password)
-      .then(authUser => {
+      .then(() => {
         // Create a user in your own accessible Firebase Database too
+        const authUser = firebase.auth.currentUser;
+        console.log("UserId of authenticatd User => " + authUser.uid);
         db.doCreateUser(authUser.uid, username, email)
           .then(() => {
             this.setState(() => ({ ...INITIAL_STATE }));
@@ -65,7 +67,7 @@ class Signup extends Component {
 
     return (
       <form id="Login" onSubmit={this.onSubmit}>
-        <div class="form-group">
+        <div className="form-group">
           <input
             value={username}
             onChange={event =>
@@ -74,26 +76,26 @@ class Signup extends Component {
               )
             }
             type="text"
-            class="form-control"
+            className="form-control"
             id="inputName"
             placeholder="Name"
           />
         </div>
 
-        <div class="form-group">
+        <div className="form-group">
           <input
             value={email}
             onChange={event =>
               this.setState(updateByPropertyName("email", event.target.value))
             }
             type="email"
-            class="form-control"
+            className="form-control"
             id="inputEmail"
             placeholder="Email Address"
           />
         </div>
 
-        <div class="form-group">
+        <div className="form-group">
           <input
             value={password}
             onChange={event =>
@@ -102,13 +104,13 @@ class Signup extends Component {
               )
             }
             type="password"
-            class="form-control"
+            className="form-control"
             id="inputPassword"
             placeholder="Password"
           />
         </div>
 
-        <button disabled={isInvalid} type="submit" class="btn btn-primary">
+        <button disabled={isInvalid} type="submit" className="btn btn-primary">
           Signup
         </button>
         {error && <p>{error.message}</p>}

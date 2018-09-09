@@ -6,7 +6,7 @@ class ChatArea extends Component {
   state = {};
   render() {
     return (
-      <div class="msg_history">
+      <div className="msg_history">
         <ChatIncoming />
         <ChatOutgoing />
         <ChatIncoming />

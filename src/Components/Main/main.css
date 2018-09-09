@@ -23,12 +23,13 @@ img {
 
 .recent_heading {
   float: left;
-  width: 40%;
+  width: 75%;
+  word-wrap: break-word;
 }
 .srch_bar {
   display: inline-block;
   text-align: right;
-  width: 60%;
+  width: 25%;
   /* padding: ; */
 }
 .headind_srch {

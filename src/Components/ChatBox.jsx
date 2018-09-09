@@ -7,7 +7,7 @@ class ChatBox extends Component {
   state = {};
   render() {
     return (
-      <div class="mesgs">
+      <div className="mesgs">
         <ChatArea />
         <ChatInput />
       </div>

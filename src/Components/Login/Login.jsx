@@ -11,10 +11,10 @@ const INITIAL_STATE = {
 };
 
 const LoginPage = ({ history }) => (
-  <div class="container-fluid">
-    <div class="login-form">
-      <div class="main-div">
-        <div class="panel">
+  <div className="container-fluid">
+    <div className="login-form">
+      <div className="main-div">
+        <div className="panel">
           <p>Please enter your email and password</p>
         </div>
         <Login history={history} />
@@ -58,20 +58,20 @@ class Login extends Component {
     const isInvalid = password === "" || email === "";
     return (
       <form id="Login" onSubmit={this.onSubmit}>
-        <div class="form-group">
+        <div className="form-group">
           <input
             value={email}
             onChange={event =>
               this.setState(updateByPropertyName("email", event.target.value))
             }
             type="email"
-            class="form-control"
+            className="form-control"
             id="inputEmail"
             placeholder="Email Address"
           />
         </div>
 
-        <div class="form-group">
+        <div className="form-group">
           <input
             value={password}
             onChange={event =>
@@ -80,15 +80,15 @@ class Login extends Component {
               )
             }
             type="password"
-            class="form-control"
+            className="form-control"
             id="inputPassword"
             placeholder="Password"
           />
         </div>
-        <div class="forgot">
+        <div className="forgot">
           <a href="#">Forgot password?</a>
         </div>
-        <button disabled={isInvalid} type="submit" class="btn btn-primary">
+        <button disabled={isInvalid} type="submit" className="btn btn-primary">
           Login
         </button>
         <SignUpLink />
@@ -99,7 +99,7 @@ class Login extends Component {
 }
 
 const SignUpLink = () => (
-  <div class="toSignup">
+  <div className="toSignup">
     <p>
       Don't have an account? <Link to={routes.SIGN_UP}>Sign Up</Link>
     </p>

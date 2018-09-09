@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 
 class UserItem extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
   render() {
     let itemClass = this.getItemClass();
 
@@ -16,9 +20,9 @@ class UserItem extends Component {
           </div>
           <div className="chat_ib">
             <h5>
-              Demo User <span className="chat_date">Date</span>
+              {this.props.username} <span className="chat_date" />
             </h5>
-            <p>Some text</p>
+            <p>{this.props.email}</p>
           </div>
         </div>
       </div>
