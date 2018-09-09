@@ -14,31 +14,42 @@ class ChatInput extends Component {
     };
   }
 
+  handleKeyPress = event => {
+    if (event.key === "Enter") {
+      this.handleSend();
+    }
+  };
+
   handleSend = event => {
-    const authUserId = auth.currentUser.uid;
-    const ref = db.ref("messages");
-    const text = {
-      text: this.state.inputMessage,
-      senderId: authUserId,
-      receiverId: this.props.activeUser,
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    };
-    //    console.log(text);
-    ref.push(text);
+    if (this.state.inputMessage != "") {
+      const authUserId = auth.currentUser.uid;
+      const ref = db.ref("messages");
+      const text = {
+        text: this.state.inputMessage,
+        senderId: authUserId,
+        receiverId: this.props.activeUser,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      };
+      //    console.log(text);
+      ref.push(text);
+    }
     this.setState({ inputMessage: "" });
   };
 
   render() {
+    const isInvalid = this.props.activeUser ? false : true;
     return (
       <div className="type_msg">
         <div className="input_msg_write">
           <input
+            disabled={isInvalid}
             value={this.state.inputMessage}
             onChange={event =>
               this.setState(
                 updateByPropertyName("inputMessage", event.target.value)
               )
             }
+            onKeyPress={this.handleKeyPress}
             type="text"
             className="write_msg"
             placeholder="Type a message"

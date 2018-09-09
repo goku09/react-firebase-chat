@@ -6,18 +6,32 @@ import ChatBox from "../ChatBox";
 //import Navbar from "../Navbar";
 import { firebase } from "../../Firebase";
 import { Link, withRouter } from "react-router-dom";
+import * as routes from "../../Constants/routes";
 
 class Main extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      activeUser: ""
+      activeUser: "",
+      authUser: ""
     };
   }
   handleActiveUser = activeUser => {
     this.setState({ activeUser: activeUser });
   };
+
+  componentWillMount() {
+    let aUser;
+    firebase.auth.onAuthStateChanged(authUser => {
+      if (authUser) {
+        aUser = authUser;
+      } else {
+        aUser = null;
+      }
+    });
+    this.setState({ authUser: aUser });
+  }
 
   render() {
     return (
