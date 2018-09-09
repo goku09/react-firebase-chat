@@ -4,12 +4,17 @@ import ChatInput from "./ChatInput";
 //import Navbar from "./Navbar";
 
 class ChatBox extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
   render() {
     return (
       <div className="mesgs">
-        <ChatArea />
-        <ChatInput />
+        <ChatArea activeUser={this.props.activeUser} />
+        <ChatInput activeUser={this.props.activeUser} />
       </div>
     );
   }

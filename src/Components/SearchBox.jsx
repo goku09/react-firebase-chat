@@ -74,9 +74,9 @@ class SearchBox extends Component {
         uid = authUser.uid;
         this.setState(updateByPropertyName("userId", uid));
         this.setState(updateByPropertyName("email", authUser.email));
-        console.log("User is present =>" + uid);
+        //        console.log("User is present =>" + uid);
       } else {
-        console.log("user is not present");
+        //        console.log("user is not present");
       }
     });
   }

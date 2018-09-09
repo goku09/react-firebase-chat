@@ -8,16 +8,23 @@ import { firebase } from "../../Firebase";
 import { Link, withRouter } from "react-router-dom";
 
 class Main extends Component {
-  // componentDidMount() {
-  //     console.log(firebase.auth.currentUser.email);
-  // }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      activeUser: ""
+    };
+  }
+  handleActiveUser = activeUser => {
+    this.setState({ activeUser: activeUser });
+  };
 
   render() {
     return (
       <React.Fragment>
         <div className="inbox_msg">
-          <Sidebar />
-          <ChatBox />
+          <Sidebar getActiveUser={this.handleActiveUser} />
+          <ChatBox activeUser={this.state.activeUser} />
         </div>
       </React.Fragment>
     );

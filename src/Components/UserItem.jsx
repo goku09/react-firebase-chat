@@ -6,11 +6,15 @@ class UserItem extends Component {
 
     this.state = {};
   }
+
   render() {
     let itemClass = this.getItemClass();
 
     return (
-      <div className={itemClass}>
+      <div
+        className={itemClass}
+        onClick={() => this.props.onClick(this.props.userId)}
+      >
         <div className="chat_people">
           <div className="chat_img">
             <img
