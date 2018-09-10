@@ -95,7 +95,7 @@ img {
   padding: 18px 16px 10px;
 }
 .inbox_chat {
-  height: 550px;
+  height: calc(100vh - 52px);
   overflow-y: scroll;
 }
 
@@ -184,6 +184,6 @@ img {
   padding: 0 0 50px 0;
 }
 .msg_history {
-  height: 516px;
+  height: calc(100vh - 80px);
   overflow-y: auto;
 }
