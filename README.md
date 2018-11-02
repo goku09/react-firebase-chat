@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # react-firebase-chat
 Realtime chat app using React.jsand Firebase 
 =======
