@@ -23,9 +23,7 @@ class ChatArea extends Component {
       if (authUser) {
         uid = authUser.uid;
         this.setState(updateByPropertyName("userId", uid));
-        //       console.log("User is present =>" + uid);
       } else {
-        //      console.log("user is not present");
       }
     });
   }
