@@ -8,23 +8,19 @@ export class UserItem extends Component {
   }
 
   render() {
-    let itemClass = this.getItemClass();
+    const itemClass = this.getItemClass();
 
     return (
-      <div
-        className={itemClass}
-        onClick={() => this.props.onClick(this.props.userId)}
-      >
+      <div className={itemClass} onClick={() => this.props.onClick(this.props.userId)}>
         <div className="chat_people">
           <div className="chat_img">
-            <img
-              src="https://ptetutorials.com/images/user-profile.png"
-              alt="User"
-            />
+            <img src="https://ptetutorials.com/images/user-profile.png" alt="User" />
           </div>
           <div className="chat_ib">
             <h5>
-              {this.props.username} <span className="chat_date" />
+              {this.props.username}
+              {" "}
+              <span className="chat_date" />
             </h5>
             <p>{this.props.email}</p>
           </div>

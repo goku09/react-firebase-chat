@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { ChatIncoming } from ".";
-import { ChatOutgoing } from ".";
+import { ChatIncoming, ChatOutgoing } from ".";
 import { db, auth } from "../Firebase/firebase";
 
 const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
+  [propertyName]: value,
 });
 
 export class ChatArea extends Component {
@@ -13,11 +12,11 @@ export class ChatArea extends Component {
 
     this.state = {
       messages: [],
-      userId: ""
+      userId: "",
     };
   }
 
-  setAuthUser() {
+  setAuthUser = () => {
     let uid;
     auth.onAuthStateChanged(authUser => {
       if (authUser) {
@@ -26,33 +25,34 @@ export class ChatArea extends Component {
       } else {
       }
     });
-  }
+  };
 
   componentWillMount() {
     this.setAuthUser();
     const ref = db.ref("messages");
     ref.orderByChild("timestamp").on("value", messagesnapshot => {
-      let newMessages = [];
+      const newMessages = [];
       messagesnapshot.forEach(snapshot => {
-        const key = snapshot.key;
+        const { key } = snapshot;
         const val = snapshot.val();
         newMessages.push({
           messagId: key,
-          text: val["text"],
-          receiverId: val["receiverId"],
-          senderId: val["senderId"],
-          timestamp: val["timestamp"]
+          text: val.text,
+          receiverId: val.receiverId,
+          senderId: val.senderId,
+          timestamp: val.timestamp,
         });
         //        console.log(newMessages);
       });
       this.setState({ messages: newMessages });
     });
   }
+
   render() {
-    const messages = this.state.messages;
+    const { messages } = this.state;
     //    console.log(messages);
 
-    console.log(this.state.userId + " , " + this.props.activeUser);
+    console.log(`${this.state.userId} , ${this.props.activeUser}`);
 
     if (!this.props.activeUser) {
       return <div className="msg_history" />;
@@ -63,8 +63,7 @@ export class ChatArea extends Component {
           if (
             (message.receiverId === this.state.userId &&
               message.senderId === this.props.activeUser) ||
-            (message.receiverId === this.props.activeUser &&
-              message.senderId === this.state.userId)
+            (message.receiverId === this.props.activeUser && message.senderId === this.state.userId)
           ) {
             return (
               <React.Fragment>
@@ -75,9 +74,8 @@ export class ChatArea extends Component {
                 )}
               </React.Fragment>
             );
-          } else {
-            return <React.Fragment />;
           }
+          return <React.Fragment />;
         })}
       </div>
     );

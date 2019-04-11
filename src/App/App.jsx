@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-expressions */
 import React, { Component } from "react";
 import "./app.css";
+import { BrowserRouter, Route } from "react-router-dom";
 import { MainPage } from "../Pages/Main";
 import { LoginPage } from "../Pages/Login";
 import { SignUpPage } from "../Pages/Signup";
-import { BrowserRouter, Route } from "react-router-dom";
 import * as routes from "../Constants/routes";
 import { firebase } from "../Firebase";
 
@@ -12,22 +13,24 @@ export class App extends Component {
     super(props);
     this.state = {
       authenticated: false,
-      authUser: null
+      authUser: null,
     };
   }
+
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authenticated => {
+    firebase.auth.onAuthStateChanged((authenticated) => {
       authenticated
         ? this.setState(() => ({
-            authenticated: true,
-            authUser: authenticated
-          }))
+          authenticated: true,
+          authUser: authenticated,
+        }))
         : this.setState(() => ({
-            authenticated: false,
-            authUser: null
-          }));
+          authenticated: false,
+          authUser: null,
+        }));
     });
   }
+
   render() {
     const { authenticated, authUser } = this.state;
     return (
@@ -39,11 +42,7 @@ export class App extends Component {
           <Route
             exact
             path={routes.MAIN}
-            component={
-              authenticated
-                ? () => <MainPage authUser={authUser} />
-                : () => <LoginPage />
-            }
+            component={authenticated ? () => <MainPage authUser={authUser} /> : () => <LoginPage />}
           />
         </div>
       </BrowserRouter>

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { ChatArea } from ".";
-import { ChatInput } from ".";
-//import Navbar from "./Navbar";
+import { ChatArea, ChatInput } from ".";
+// import Navbar from "./Navbar";
 
 export class ChatBox extends Component {
   constructor(props) {

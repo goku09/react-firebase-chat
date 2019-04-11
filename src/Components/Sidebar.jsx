@@ -7,7 +7,7 @@ export class Sidebar extends Component {
     super(props);
 
     this.state = {
-      isActiveUser: ""
+      isActiveUser: "",
     };
   }
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { auth, db, firebase } from "../Firebase/firebase";
 
 const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
+  [propertyName]: value,
 });
 
 export class ChatInput extends Component {
@@ -10,7 +10,7 @@ export class ChatInput extends Component {
     super(props);
 
     this.state = {
-      inputMessage: ""
+      inputMessage: "",
     };
   }
 
@@ -28,7 +28,7 @@ export class ChatInput extends Component {
         text: this.state.inputMessage,
         senderId: authUserId,
         receiverId: this.props.activeUser,
-        timestamp: firebase.database.ServerValue.TIMESTAMP
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
       };
       //    console.log(text);
       ref.push(text);
@@ -45,20 +45,14 @@ export class ChatInput extends Component {
             disabled={isInvalid}
             value={this.state.inputMessage}
             onChange={event =>
-              this.setState(
-                updateByPropertyName("inputMessage", event.target.value)
-              )
+              this.setState(updateByPropertyName("inputMessage", event.target.value))
             }
             onKeyPress={this.handleKeyPress}
             type="text"
             className="write_msg"
             placeholder="Type a message"
           />
-          <button
-            className="msg_send_btn"
-            type="button"
-            onClick={this.handleSend}
-          >
+          <button className="msg_send_btn" type="button" onClick={this.handleSend}>
             <i className="fa fa-paper-plane-o" aria-hidden="true" />
           </button>
         </div>

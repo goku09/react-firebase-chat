@@ -8,7 +8,7 @@ const INITIAL_STATE = {
   username: "",
   email: "",
   password: "",
-  error: null
+  error: null,
 };
 
 const SignUpPageContainer = ({ history }) => (
@@ -25,7 +25,7 @@ const SignUpPageContainer = ({ history }) => (
 );
 
 const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
+  [propertyName]: value,
 });
 
 class Signup extends Component {
@@ -70,11 +70,7 @@ class Signup extends Component {
         <div className="form-group">
           <input
             value={username}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("username", event.target.value)
-              )
-            }
+            onChange={event => this.setState(updateByPropertyName("username", event.target.value))}
             type="text"
             className="form-control"
             id="inputName"
@@ -85,9 +81,7 @@ class Signup extends Component {
         <div className="form-group">
           <input
             value={email}
-            onChange={event =>
-              this.setState(updateByPropertyName("email", event.target.value))
-            }
+            onChange={event => this.setState(updateByPropertyName("email", event.target.value))}
             type="email"
             className="form-control"
             id="inputEmail"
@@ -98,11 +92,7 @@ class Signup extends Component {
         <div className="form-group">
           <input
             value={password}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("password", event.target.value)
-              )
-            }
+            onChange={event => this.setState(updateByPropertyName("password", event.target.value))}
             type="password"
             className="form-control"
             id="inputPassword"

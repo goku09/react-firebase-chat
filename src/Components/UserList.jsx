@@ -4,7 +4,7 @@ import { firebase } from "../Firebase";
 import { db } from "../Firebase/firebase";
 
 const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
+  [propertyName]: value,
 });
 
 export class UserList extends Component {
@@ -14,7 +14,7 @@ export class UserList extends Component {
     this.state = {
       users: [],
       isActiveUser: "",
-      userId: ""
+      userId: "",
     };
   }
 
@@ -46,7 +46,7 @@ export class UserList extends Component {
         newUsers.push({
           userId: key,
           username: val["username"],
-          email: val["email"]
+          email: val["email"],
         });
         //        console.log(key + "," + val["username"] + "," + val["email"]);
       });
@@ -73,9 +73,7 @@ export class UserList extends Component {
                   userId={user.userId}
                   username={user.username}
                   email={user.email}
-                  isActive={
-                    user.userId === this.state.isActiveUser ? true : false
-                  }
+                  isActive={user.userId === this.state.isActiveUser ? true : false}
                   onClick={this.handleClick}
                 />
               )}

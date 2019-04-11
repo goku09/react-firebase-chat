@@ -8,11 +8,11 @@ const INITIAL_STATE = {
   username: "",
   email: "",
 
-  error: null
+  error: null,
 };
 
 const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value
+  [propertyName]: value,
 });
 
 class SearchBoxComponent extends Component {
@@ -75,10 +75,7 @@ class SearchBoxComponent extends Component {
         </div>
         <div className="srch_bar">
           <div className="stylish-input-group">
-            <button
-              className="btn btn-secondary btn-sm"
-              onClick={this.handleSignOut}
-            >
+            <button className="btn btn-secondary btn-sm" onClick={this.handleSignOut}>
               Sign Out
             </button>
           </div>
