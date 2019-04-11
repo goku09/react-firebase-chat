@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import SearchBox from "./SearchBox";
-import UserList from "./UserList";
+import { SearchBox } from ".";
+import { UserList } from ".";
 
-class Sidebar extends Component {
+export class Sidebar extends Component {
   constructor(props) {
     super(props);
 
@@ -25,5 +25,3 @@ class Sidebar extends Component {
     );
   }
 }
-
-export default Sidebar;

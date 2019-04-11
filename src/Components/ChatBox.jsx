@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import ChatArea from "./ChatArea";
-import ChatInput from "./ChatInput";
+import { ChatArea } from ".";
+import { ChatInput } from ".";
 //import Navbar from "./Navbar";
 
-class ChatBox extends Component {
+export class ChatBox extends Component {
   constructor(props) {
     super(props);
 
@@ -19,5 +19,3 @@ class ChatBox extends Component {
     );
   }
 }
-
-export default ChatBox;

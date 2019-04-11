@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import "./main.css";
-import Sidebar from "../Sidebar";
-import ChatBox from "../ChatBox";
-import { firebase } from "../../Firebase";
-import { Link, withRouter } from "react-router-dom";
-import * as routes from "../../Constants/routes";
+import { Sidebar } from "../../Components";
+import { ChatBox } from "../../Components";
+import { withRouter } from "react-router-dom";
 
 class Main extends Component {
   constructor(props) {
@@ -30,4 +28,4 @@ class Main extends Component {
   }
 }
 
-export default withRouter(Main);
+export const MainPage = withRouter(Main);

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class UserItem extends Component {
+export class UserItem extends Component {
   constructor(props) {
     super(props);
 
@@ -39,5 +39,3 @@ class UserItem extends Component {
     return itemClass;
   }
 }
-
-export default UserItem;

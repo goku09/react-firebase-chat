@@ -1,24 +1,23 @@
 import React, { Component } from "react";
-import "./signup.css";
 import { Link, withRouter } from "react-router-dom";
+import "./login.css";
 import * as routes from "../../Constants/routes";
-import { firebase, auth, db } from "../../Firebase";
+import { auth } from "../../Firebase";
 
 const INITIAL_STATE = {
-  username: "",
   email: "",
   password: "",
   error: null
 };
 
-const SignUpPage = ({ history }) => (
+const LoginPageContainer = ({ history }) => (
   <div className="container-fluid">
     <div className="login-form">
       <div className="main-div">
         <div className="panel">
-          <p>Please provide the below details</p>
+          <p>Please enter your email and password</p>
         </div>
-        <Signup history={history} />
+        <Login history={history} />
       </div>
     </div>
   </div>
@@ -28,31 +27,23 @@ const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
 });
 
-class Signup extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
+
     this.state = { ...INITIAL_STATE };
   }
 
   onSubmit = event => {
-    const { username, email, password } = this.state;
+    const { email, password } = this.state;
 
     const { history } = this.props;
 
     auth
-      .doCreateUserWithEmailAndPassword(email, password)
+      .doSignInWithEmailAndPassword(email, password)
       .then(() => {
-        // Create a user in your own accessible Firebase Database too
-        const authUser = firebase.auth.currentUser;
-        console.log("UserId of authenticatd User => " + authUser.uid);
-        db.doCreateUser(authUser.uid, username, email)
-          .then(() => {
-            this.setState(() => ({ ...INITIAL_STATE }));
-            history.push(routes.MAIN);
-          })
-          .catch(error => {
-            this.setState(updateByPropertyName("error", error));
-          });
+        this.setState(() => ({ ...INITIAL_STATE }));
+        history.push(routes.MAIN);
       })
       .catch(error => {
         this.setState(updateByPropertyName("error", error));
@@ -60,28 +51,13 @@ class Signup extends Component {
 
     event.preventDefault();
   };
+
   render() {
-    const { username, email, password, error } = this.state;
+    const { email, password, error } = this.state;
 
-    const isInvalid = password === "" || username === "" || email === "";
-
+    const isInvalid = password === "" || email === "";
     return (
       <form id="Login" onSubmit={this.onSubmit}>
-        <div className="form-group">
-          <input
-            value={username}
-            onChange={event =>
-              this.setState(
-                updateByPropertyName("username", event.target.value)
-              )
-            }
-            type="text"
-            className="form-control"
-            id="inputName"
-            placeholder="Name"
-          />
-        </div>
-
         <div className="form-group">
           <input
             value={email}
@@ -109,14 +85,25 @@ class Signup extends Component {
             placeholder="Password"
           />
         </div>
-
+        <div className="forgot">
+          <a href="#">Forgot password?</a>
+        </div>
         <button disabled={isInvalid} type="submit" className="btn btn-primary">
-          Signup
+          Login
         </button>
+        <SignUpLink />
         {error && <p>{error.message}</p>}
       </form>
     );
   }
 }
 
-export default withRouter(SignUpPage);
+const SignUpLink = () => (
+  <div className="toSignup">
+    <p>
+      Don't have an account? <Link to={routes.SIGN_UP}>Sign Up</Link>
+    </p>
+  </div>
+);
+
+export const LoginPage = withRouter(LoginPageContainer);

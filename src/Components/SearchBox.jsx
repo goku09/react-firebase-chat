@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { firebase, auth } from "../Firebase";
 import * as routes from "../Constants/routes";
-import { db } from "../Firebase/firebase";
 import { withRouter } from "react-router-dom";
 
 const INITIAL_STATE = {
@@ -16,7 +15,7 @@ const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
 });
 
-class SearchBox extends Component {
+class SearchBoxComponent extends Component {
   constructor(props) {
     super(props);
 
@@ -30,42 +29,6 @@ class SearchBox extends Component {
       .then(this.props.history.push(routes.LANDING))
       .catch();
   };
-
-  // componentWillMount() {
-  //   let uid;
-  //   let promise = new Promise((resolve, reject) => {
-  //     firebase.auth.onAuthStateChanged(authUser => {
-  //       if (authUser) {
-  //         uid = authUser.uid;
-  //         this.setState(updateByPropertyName("userId", uid));
-  //         console.log("User is present =>" + uid);
-  //       } else {
-  //         console.log("user is not present");
-  //       }
-  //     });
-
-  //     if (uid != null) {
-  //       resolve("Promise resolved successfully");
-  //     } else {
-  //       reject(Error("Promise rejected"));
-  //     }
-  //   });
-  //   promise.then(uid => {
-  //     const ref = db.ref("users").child(uid);
-  //     ref
-  //       .once("value")
-  //       .then(snapshot => {
-  //         const key = snapshot.key;
-  //         const val = snapshot.val();
-  //         console.log(val);
-  //       })
-  //       .catch(e => {
-  //         console.log("Error fething data => ", e);
-  //       });
-  //   });
-
-  //   this.setState(updateByPropertyName("username", this.state.username));
-  // }
 
   componentWillMount() {
     let uid;
@@ -118,12 +81,6 @@ class SearchBox extends Component {
             >
               Sign Out
             </button>
-            {/* <input type="text" className="search-bar" placeholder="Search" />
-            <span className="input-group-addon">
-              <button type="button">
-                <i className="fa fa-search" aria-hidden="true" />
-              </button>
-            </span> */}
           </div>
         </div>
       </div>
@@ -131,4 +88,4 @@ class SearchBox extends Component {
   }
 }
 
-export default withRouter(SearchBox);
+export const SearchBox = withRouter(SearchBoxComponent);
