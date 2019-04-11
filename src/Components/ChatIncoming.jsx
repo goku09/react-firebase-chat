@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class ChatIncoming extends Component {
+export class ChatIncoming extends Component {
   constructor(props) {
     super(props);
 
@@ -25,5 +25,3 @@ class ChatIncoming extends Component {
     );
   }
 }
-
-export default ChatIncoming;

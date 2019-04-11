@@ -5,7 +5,7 @@ const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
 });
 
-class ChatInput extends Component {
+export class ChatInput extends Component {
   constructor(props) {
     super(props);
 
@@ -21,7 +21,7 @@ class ChatInput extends Component {
   };
 
   handleSend = event => {
-    if (this.state.inputMessage != "") {
+    if (this.state.inputMessage !== "") {
       const authUserId = auth.currentUser.uid;
       const ref = db.ref("messages");
       const text = {
@@ -66,5 +66,3 @@ class ChatInput extends Component {
     );
   }
 }
-
-export default ChatInput;

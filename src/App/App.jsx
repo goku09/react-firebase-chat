@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import "./app.css";
-import Main from "../Main/Main.jsx";
-import LoginPage from "../Login/Login.jsx";
-import SignUpPage from "../Signup/Signup.jsx";
+import { MainPage } from "../Pages/Main";
+import { LoginPage } from "../Pages/Login";
+import { SignUpPage } from "../Pages/Signup";
 import { BrowserRouter, Route } from "react-router-dom";
-import * as routes from "../../Constants/routes";
-import { firebase } from "../../Firebase";
+import * as routes from "../Constants/routes";
+import { firebase } from "../Firebase";
 
-class App extends Component {
+export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +41,7 @@ class App extends Component {
             path={routes.MAIN}
             component={
               authenticated
-                ? () => <Main authUser={authUser} />
+                ? () => <MainPage authUser={authUser} />
                 : () => <LoginPage />
             }
           />
@@ -50,5 +50,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;

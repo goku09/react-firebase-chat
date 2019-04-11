@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import UserItem from "./UserItem";
-import { firebase, auth } from "../Firebase";
+import { UserItem } from ".";
+import { firebase } from "../Firebase";
 import { db } from "../Firebase/firebase";
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value
 });
 
-class UserList extends Component {
+export class UserList extends Component {
   constructor(props) {
     super(props);
 
@@ -67,14 +67,14 @@ class UserList extends Component {
           // console.log(user.userId + " , " + user.username + " , " + user.email);
           return (
             <React.Fragment>
-              {this.state.userId != user.userId && (
+              {this.state.userId !== user.userId && (
                 <UserItem
                   key={user.userId}
                   userId={user.userId}
                   username={user.username}
                   email={user.email}
                   isActive={
-                    user.userId == this.state.isActiveUser ? true : false
+                    user.userId === this.state.isActiveUser ? true : false
                   }
                   onClick={this.handleClick}
                 />
@@ -86,5 +86,3 @@ class UserList extends Component {
     );
   }
 }
-
-export default UserList;
