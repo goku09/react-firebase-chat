@@ -8,11 +8,12 @@ export class ChatOutgoing extends Component {
   }
 
   render() {
+    const { text } = this.props;
     return (
       <div className="outgoing_msg">
         <div className="sent_msg">
-          <p>{this.props.text}</p>
-          <span className="time_date"> </span>
+          <p>{text}</p>
+          <span className="time_date" />
         </div>
       </div>
     );
