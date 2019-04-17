@@ -1,81 +1,40 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { firebase, auth } from "../Firebase";
-import * as routes from "../Constants/routes";
 import { withRouter } from "react-router-dom";
+import { compose } from "recompose";
+import { withFirebase } from "../Firebase";
+import * as routes from "../Constants/routes";
 
-const INITIAL_STATE = {
-  userId: "",
-  username: "",
-  email: "",
-
-  error: null,
-};
-
-const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value,
-});
+// const updateByPropertyName = (propertyName, value) => () => ({
+//   [propertyName]: value,
+// });
 
 class SearchBoxComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { ...INITIAL_STATE };
+    this.state = {};
   }
 
-  //  state = {};
-  handleSignOut = event => {
-    auth
+  handleSignOut = (event) => {
+    const { firebase, history } = this.props;
+    firebase
       .doSignOut()
-      .then(this.props.history.push(routes.LANDING))
+      .then(history.push(routes.LANDING))
       .catch();
   };
 
-  componentWillMount() {
-    let uid;
-    firebase.auth.onAuthStateChanged(authUser => {
-      if (authUser) {
-        uid = authUser.uid;
-        this.setState(updateByPropertyName("userId", uid));
-        this.setState(updateByPropertyName("email", authUser.email));
-        //        console.log("User is present =>" + uid);
-      } else {
-        //        console.log("user is not present");
-      }
-    });
-  }
-
-  componentDidMount() {
-    //let uid = firebase.auth.currentUser.uid;
-    // let uid;
-    // firebase.auth.onAuthStateChanged(authUser => {
-    //   if (authUser) {
-    //     uid = authUser.uid;
-    //     this.setState(updateByPropertyName("userId", uid));
-    //     this.setState(updateByPropertyName("email", authUser.email));
-    //     console.log("User is present =>" + uid);
-    //   } else {
-    //     console.log("user is not present");
-    //   }
-    // });
-    // console.log("After getting uid");
-    // const ref = db.ref("users");
-    // ref.on("value", snapshot => {
-    //   const key = snapshot.key;
-    //   const val = snapshot.val();
-    //   console.log(val);
-    // });
-    // this.setState(updateByPropertyName("username", "Pawan"));
-  }
-
   render() {
+    const { authUser } = this.props;
+    const { email } = authUser;
     return (
       <div className="headind_srch">
         <div className="recent_heading">
-          <h4>{this.state.email}</h4>
+          <h4>{email}</h4>
         </div>
         <div className="srch_bar">
           <div className="stylish-input-group">
-            <button className="btn btn-secondary btn-sm" onClick={this.handleSignOut}>
+            <button type="button" className="btn btn-secondary btn-sm" onClick={this.handleSignOut}>
               Sign Out
             </button>
           </div>
@@ -85,4 +44,7 @@ class SearchBoxComponent extends Component {
   }
 }
 
-export const SearchBox = withRouter(SearchBoxComponent);
+export const SearchBox = compose(
+  withRouter,
+  withFirebase,
+)(SearchBoxComponent);

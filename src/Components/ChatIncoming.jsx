@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 
 export class ChatIncoming extends Component {
@@ -8,6 +9,7 @@ export class ChatIncoming extends Component {
   }
 
   render() {
+    const { text } = this.props;
     return (
       <div className="incoming_msg">
         <div className="incoming_msg_img">
@@ -15,7 +17,7 @@ export class ChatIncoming extends Component {
         </div>
         <div className="received_msg">
           <div className="received_withd_msg">
-            <p>{this.props.text}</p>
+            <p>{text}</p>
             <span className="time_date" />
           </div>
         </div>

@@ -1,26 +1,25 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { SearchBox } from ".";
-import { UserList } from ".";
+import { SearchBox, UserList } from ".";
 
 export class Sidebar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      isActiveUser: "",
-    };
+    this.state = {};
   }
 
-  handleActiveUser = activeUser => {
-    this.setState({ isActiveUser: activeUser });
-    this.props.getActiveUser(activeUser);
+  handleActiveUser = (activeUser) => {
+    const { getActiveUser } = this.props;
+    getActiveUser(activeUser);
   };
 
   render() {
+    const { authUser } = this.props;
     return (
       <div className="inbox_people">
-        <SearchBox />
-        <UserList getActiveUser={this.handleActiveUser} />
+        <SearchBox authUser={authUser} />
+        <UserList getActiveUser={this.handleActiveUser} authUser={authUser} />
       </div>
     );
   }

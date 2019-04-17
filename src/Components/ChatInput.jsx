@@ -1,11 +1,13 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { auth, db, firebase } from "../Firebase/firebase";
+import { compose } from "recompose";
+import { withFirebase } from "../Firebase";
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value,
 });
 
-export class ChatInput extends Component {
+export class ChatInputComponent extends Component {
   constructor(props) {
     super(props);
 
@@ -14,38 +16,33 @@ export class ChatInput extends Component {
     };
   }
 
-  handleKeyPress = event => {
+  handleKeyPress = (event) => {
     if (event.key === "Enter") {
       this.handleSend();
     }
   };
 
-  handleSend = event => {
-    if (this.state.inputMessage !== "") {
-      const authUserId = auth.currentUser.uid;
-      const ref = db.ref("messages");
-      const text = {
-        text: this.state.inputMessage,
-        senderId: authUserId,
-        receiverId: this.props.activeUser,
-        timestamp: firebase.database.ServerValue.TIMESTAMP,
-      };
-      //    console.log(text);
-      ref.push(text);
+  handleSend = (event) => {
+    const { firebase, authUser, activeUser } = this.props;
+    const { inputMessage } = this.state;
+    if (inputMessage !== "") {
+      const authUserId = authUser.uid;
+      firebase.doCreateMessage(inputMessage, authUserId, activeUser);
     }
     this.setState({ inputMessage: "" });
   };
 
   render() {
-    const isInvalid = this.props.activeUser ? false : true;
+    const { activeUser } = this.props;
+    const { inputMessage } = this.state;
+    const isInvalid = !activeUser;
     return (
       <div className="type_msg">
         <div className="input_msg_write">
           <input
             disabled={isInvalid}
-            value={this.state.inputMessage}
-            onChange={event =>
-              this.setState(updateByPropertyName("inputMessage", event.target.value))
+            value={inputMessage}
+            onChange={event => this.setState(updateByPropertyName("inputMessage", event.target.value))
             }
             onKeyPress={this.handleKeyPress}
             type="text"
@@ -60,3 +57,5 @@ export class ChatInput extends Component {
     );
   }
 }
+
+export const ChatInput = compose(withFirebase)(ChatInputComponent);

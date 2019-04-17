@@ -1,38 +1,23 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
+import { compose } from "recompose";
+import { withFirebase } from "../Firebase";
 import { ChatIncoming, ChatOutgoing } from ".";
-import { db, auth } from "../Firebase/firebase";
 
-const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value,
-});
-
-export class ChatArea extends Component {
+class ChatAreaComponent extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       messages: [],
-      userId: "",
     };
   }
 
-  setAuthUser = () => {
-    let uid;
-    auth.onAuthStateChanged(authUser => {
-      if (authUser) {
-        uid = authUser.uid;
-        this.setState(updateByPropertyName("userId", uid));
-      } else {
-      }
-    });
-  };
-
   componentWillMount() {
-    this.setAuthUser();
-    const ref = db.ref("messages");
-    ref.orderByChild("timestamp").on("value", messagesnapshot => {
+    const { firebase } = this.props;
+    firebase.onMessageAdded((messagesnapshot) => {
       const newMessages = [];
-      messagesnapshot.forEach(snapshot => {
+      messagesnapshot.forEach((snapshot) => {
         const { key } = snapshot;
         const val = snapshot.val();
         newMessages.push({
@@ -42,7 +27,6 @@ export class ChatArea extends Component {
           senderId: val.senderId,
           timestamp: val.timestamp,
         });
-        //        console.log(newMessages);
       });
       this.setState({ messages: newMessages });
     });
@@ -50,24 +34,22 @@ export class ChatArea extends Component {
 
   render() {
     const { messages } = this.state;
-    //    console.log(messages);
+    const { authUser, activeUser } = this.props;
+    const userId = authUser.uid;
 
-    console.log(`${this.state.userId} , ${this.props.activeUser}`);
-
-    if (!this.props.activeUser) {
+    if (!activeUser) {
       return <div className="msg_history" />;
     }
     return (
       <div className="msg_history">
-        {messages.map(message => {
+        {messages.map((message) => {
           if (
-            (message.receiverId === this.state.userId &&
-              message.senderId === this.props.activeUser) ||
-            (message.receiverId === this.props.activeUser && message.senderId === this.state.userId)
+            (message.receiverId === userId && message.senderId === activeUser)
+            || (message.receiverId === activeUser && message.senderId === userId)
           ) {
             return (
               <React.Fragment>
-                {message.senderId === this.props.activeUser ? (
+                {message.senderId === activeUser ? (
                   <ChatIncoming key={message.messagId} text={message.text} />
                 ) : (
                   <ChatOutgoing key={message.messagId} text={message.text} />
@@ -81,3 +63,5 @@ export class ChatArea extends Component {
     );
   }
 }
+
+export const ChatArea = compose(withFirebase)(ChatAreaComponent);

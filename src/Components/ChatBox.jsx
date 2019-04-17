@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { ChatArea, ChatInput } from ".";
 // import Navbar from "./Navbar";
@@ -10,10 +11,11 @@ export class ChatBox extends Component {
   }
 
   render() {
+    const { authUser, activeUser } = this.props;
     return (
       <div className="mesgs">
-        <ChatArea activeUser={this.props.activeUser} />
-        <ChatInput activeUser={this.props.activeUser} />
+        <ChatArea activeUser={activeUser} authUser={authUser} />
+        <ChatInput activeUser={activeUser} authUser={authUser} />
       </div>
     );
   }

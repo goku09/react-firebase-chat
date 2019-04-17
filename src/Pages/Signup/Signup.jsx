@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import "./signup.css";
 import { withRouter } from "react-router-dom";
+import { compose } from "recompose";
+import { withFirebase } from "../../Firebase";
+import "./signup.css";
 import * as routes from "../../Constants/routes";
-import { firebase, auth, db } from "../../Firebase";
 
 const INITIAL_STATE = {
   username: "",
@@ -10,19 +12,6 @@ const INITIAL_STATE = {
   password: "",
   error: null,
 };
-
-const SignUpPageContainer = ({ history }) => (
-  <div className="container-fluid">
-    <div className="login-form">
-      <div className="main-div">
-        <div className="panel">
-          <p>Please provide the below details</p>
-        </div>
-        <Signup history={history} />
-      </div>
-    </div>
-  </div>
-);
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -34,79 +23,96 @@ class Signup extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  onSubmit = event => {
+  onSubmit = (event) => {
     const { username, email, password } = this.state;
 
-    const { history } = this.props;
+    const { history, firebase } = this.props;
 
-    auth
+    firebase
       .doCreateUserWithEmailAndPassword(email, password)
-      .then(() => {
+      .then((authUser) => {
         // Create a user in your own accessible Firebase Database too
-        const authUser = firebase.auth.currentUser;
-        console.log("UserId of authenticatd User => " + authUser.uid);
-        db.doCreateUser(authUser.uid, username, email)
+        firebase
+          .doCreateUser(authUser.user.uid, username, email)
           .then(() => {
             this.setState(() => ({ ...INITIAL_STATE }));
             history.push(routes.MAIN);
           })
-          .catch(error => {
+          .catch((error) => {
             this.setState(updateByPropertyName("error", error));
           });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState(updateByPropertyName("error", error));
       });
 
     event.preventDefault();
   };
+
   render() {
-    const { username, email, password, error } = this.state;
+    const {
+      username, email, password, error,
+    } = this.state;
 
     const isInvalid = password === "" || username === "" || email === "";
 
     return (
-      <form id="Login" onSubmit={this.onSubmit}>
-        <div className="form-group">
-          <input
-            value={username}
-            onChange={event => this.setState(updateByPropertyName("username", event.target.value))}
-            type="text"
-            className="form-control"
-            id="inputName"
-            placeholder="Name"
-          />
-        </div>
+      <div className="container-fluid">
+        <div className="login-form">
+          <div className="main-div">
+            <div className="panel">
+              <p>Please provide the below details</p>
+            </div>
+            <form id="Login" onSubmit={this.onSubmit}>
+              <div className="form-group">
+                <input
+                  value={username}
+                  onChange={event => this.setState(updateByPropertyName("username", event.target.value))
+                  }
+                  type="text"
+                  className="form-control"
+                  id="inputName"
+                  placeholder="Name"
+                />
+              </div>
 
-        <div className="form-group">
-          <input
-            value={email}
-            onChange={event => this.setState(updateByPropertyName("email", event.target.value))}
-            type="email"
-            className="form-control"
-            id="inputEmail"
-            placeholder="Email Address"
-          />
-        </div>
+              <div className="form-group">
+                <input
+                  value={email}
+                  onChange={event => this.setState(updateByPropertyName("email", event.target.value))
+                  }
+                  type="email"
+                  className="form-control"
+                  id="inputEmail"
+                  placeholder="Email Address"
+                />
+              </div>
 
-        <div className="form-group">
-          <input
-            value={password}
-            onChange={event => this.setState(updateByPropertyName("password", event.target.value))}
-            type="password"
-            className="form-control"
-            id="inputPassword"
-            placeholder="Password"
-          />
-        </div>
+              <div className="form-group">
+                <input
+                  value={password}
+                  onChange={event => this.setState(updateByPropertyName("password", event.target.value))
+                  }
+                  type="password"
+                  className="form-control"
+                  id="inputPassword"
+                  placeholder="Password"
+                />
+              </div>
 
-        <button disabled={isInvalid} type="submit" className="btn btn-primary">
-          Signup
-        </button>
-        {error && <p>{error.message}</p>}
-      </form>
+              <button disabled={isInvalid} type="submit" className="btn btn-primary">
+                Signup
+              </button>
+              {error && <p>{error.message}</p>}
+            </form>
+          </div>
+        </div>
+      </div>
     );
   }
 }
 
-export const SignUpPage = withRouter(SignUpPageContainer);
+export const SignUpPage = compose(
+  withRouter,
+  withFirebase,
+)(Signup);
