@@ -18,12 +18,13 @@
 .env.production.local
 
 # log
-.log
+*.log
 
 # lock
 package-lock.json
+yarn.lock
 
 # Firebase
-/.firebase
-.firebaserc
+.firebase
+*.firebaserc
 
