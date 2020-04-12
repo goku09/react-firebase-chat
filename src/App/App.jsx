@@ -3,11 +3,11 @@ import React, { Component } from "react";
 import "./app.css";
 import { BrowserRouter, Route } from "react-router-dom";
 import { compose } from "recompose";
-import { withFirebase } from "../Firebase";
-import { MainPage } from "../Pages/Main";
-import { LoginPage } from "../Pages/Login";
-import { SignUpPage } from "../Pages/Signup";
-import * as routes from "../Constants/routes";
+import { withFirebase } from "../firebase";
+import { MainPage } from "../pages/Main";
+import { LoginPage } from "../pages/Login";
+import { SignUpPage } from "../pages/Signup";
+import * as routes from "../constants/routes";
 
 class AppComponent extends Component {
   constructor(props) {

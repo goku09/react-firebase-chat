@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import "./main.css";
 import { withRouter } from "react-router-dom";
-import { Sidebar, ChatBox } from "../../Components";
+import { Sidebar, ChatBox } from "../../components";
 
 class Main extends Component {
   constructor(props) {

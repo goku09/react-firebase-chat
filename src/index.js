@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from "react";
 import ReactDOM from "react-dom";
-import { App } from "./App";
+import { App } from "./app";
 import "bootstrap/dist/css/bootstrap.css";
-import Firebase, { FirebaseContext } from "./Firebase";
+import Firebase, { FirebaseContext } from "./firebase";
 
 ReactDOM.render(
   <FirebaseContext.Provider value={new Firebase()}>

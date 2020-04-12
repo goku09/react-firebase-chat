@@ -2,8 +2,8 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
-import { withFirebase } from "../Firebase";
-import * as routes from "../Constants/routes";
+import { withFirebase } from "../firebase";
+import * as routes from "../constants/routes";
 
 // const updateByPropertyName = (propertyName, value) => () => ({
 //   [propertyName]: value,

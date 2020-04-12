@@ -2,9 +2,9 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
-import { withFirebase } from "../../Firebase";
+import { withFirebase } from "../../firebase";
 import "./signup.css";
-import * as routes from "../../Constants/routes";
+import * as routes from "../../constants/routes";
 
 const INITIAL_STATE = {
   username: "",

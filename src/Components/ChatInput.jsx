@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { compose } from "recompose";
-import { withFirebase } from "../Firebase";
+import { withFirebase } from "../firebase";
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value,
