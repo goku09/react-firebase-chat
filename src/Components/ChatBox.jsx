@@ -14,8 +14,8 @@ export class ChatBox extends Component {
     const { authUser, activeUser } = this.props;
     return (
       <div className="mesgs">
-        <ChatArea activeUser={activeUser} authUser={authUser} />
-        <ChatInput activeUser={activeUser} authUser={authUser} />
+        <ChatArea />
+        <ChatInput />
       </div>
     );
   }

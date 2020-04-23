@@ -1,55 +1,53 @@
 /* eslint-disable no-unused-expressions */
 import React, { Component } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { authListener } from "../redux/actions";
 import "./app.css";
-import { BrowserRouter, Route } from "react-router-dom";
-import { compose } from "recompose";
-import { withFirebase } from "../firebase";
+import * as routes from "../constants/routes";
 import { MainPage } from "../pages/Main";
 import { LoginPage } from "../pages/Login";
 import { SignUpPage } from "../pages/Signup";
-import * as routes from "../constants/routes";
 
 class AppComponent extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      authenticated: false,
-      authUser: null,
-    };
+    this.state = {};
   }
 
   componentDidMount() {
-    const { firebase } = this.props;
-    firebase.auth.onAuthStateChanged((authenticated) => {
-      authenticated
-        ? this.setState(() => ({
-          authenticated: true,
-          authUser: authenticated,
-        }))
-        : this.setState(() => ({
-          authenticated: false,
-          authUser: null,
-        }));
-    });
+    const { authListener } = this.props;
+    authListener();
   }
 
   render() {
-    const { authenticated, authUser } = this.state;
+    const { authenticated } = this.props;
     return (
       <BrowserRouter>
         <div className="app">
-          <Route exact path={routes.LANDING} component={() => <LoginPage />} />
-          <Route exact path={routes.SIGN_UP} component={() => <SignUpPage />} />
-          <Route exact path={routes.SIGN_IN} component={() => <LoginPage />} />
-          <Route
-            exact
-            path={routes.MAIN}
-            component={authenticated ? () => <MainPage authUser={authUser} /> : () => <LoginPage />}
-          />
+          <Switch>
+            <Route exact path={routes.LANDING}>
+              {authenticated ? () => <MainPage /> : () => <LoginPage />}
+            </Route>
+            <Route exact path={routes.SIGN_UP}>
+              <SignUpPage />
+            </Route>
+            <Route exact path={routes.SIGN_IN}>
+              <LoginPage />
+            </Route>
+          </Switch>
         </div>
       </BrowserRouter>
     );
   }
 }
 
-export const App = compose(withFirebase)(AppComponent);
+const mapStateToProps = ({ auth }) => ({
+  authenticated: auth.authenticated,
+});
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ authListener }, dispatch);
+
+export const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);

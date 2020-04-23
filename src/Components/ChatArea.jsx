@@ -1,67 +1,67 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { compose } from "recompose";
-import { withFirebase } from "../firebase";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { isEmpty } from "lodash";
+import { messageListener } from "../redux/actions";
 import { ChatIncoming, ChatOutgoing } from ".";
+import { MessageService } from "../services/firebase";
 
 class ChatAreaComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      messages: [],
-    };
+    this.state = {};
   }
 
   componentWillMount() {
-    const { firebase } = this.props;
-    firebase.onMessageAdded((messagesnapshot) => {
-      const newMessages = [];
-      messagesnapshot.forEach((snapshot) => {
-        const { key } = snapshot;
-        const val = snapshot.val();
-        newMessages.push({
-          messagId: key,
-          text: val.text,
-          receiverId: val.receiverId,
-          senderId: val.senderId,
-          timestamp: val.timestamp,
-        });
-      });
-      this.setState({ messages: newMessages });
-    });
+    const { messageListener } = this.props;
+    messageListener();
   }
 
   render() {
-    const { messages } = this.state;
-    const { authUser, activeUser } = this.props;
-    const userId = authUser.uid;
+    const { authUser, selectedUser, messageList } = this.props;
+    const authUserId = authUser.uid;
+    const selectedUserId = selectedUser.userId;
 
-    if (!activeUser) {
+    const filteredMessageList = messageList.filter(
+      (message) =>
+        (message.receiverId === authUserId &&
+          message.senderId === selectedUserId) ||
+        (message.receiverId === selectedUserId &&
+          message.senderId === authUserId)
+    );
+
+    if (isEmpty(selectedUserId)) {
       return <div className="msg_history" />;
     }
     return (
       <div className="msg_history">
-        {messages.map((message) => {
-          if (
-            (message.receiverId === userId && message.senderId === activeUser)
-            || (message.receiverId === activeUser && message.senderId === userId)
-          ) {
-            return (
-              <React.Fragment>
-                {message.senderId === activeUser ? (
-                  <ChatIncoming key={message.messagId} text={message.text} />
-                ) : (
-                  <ChatOutgoing key={message.messagId} text={message.text} />
-                )}
-              </React.Fragment>
-            );
-          }
-          return <React.Fragment />;
-        })}
+        {filteredMessageList.map((message) => (
+          <React.Fragment key={message.messagId}>
+            {message.senderId === selectedUserId ? (
+              <ChatIncoming text={message.text} />
+            ) : (
+              <ChatOutgoing text={message.text} />
+            )}
+          </React.Fragment>
+        ))}
       </div>
     );
   }
 }
 
-export const ChatArea = compose(withFirebase)(ChatAreaComponent);
+const mapStateToProps = ({ user, auth, message }) => ({
+  authUser: auth.authUser,
+  authenticated: auth.authenticated,
+  selectedUser: user.selectedUser,
+  messageList: message.messageList,
+});
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ messageListener }, dispatch);
+
+export const ChatArea = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChatAreaComponent);
