@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
-import { compose } from "recompose";
-import { withFirebase } from "../../Firebase";
+import { Link, withRouter, Redirect } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { isEmpty } from "lodash";
+import { loginUser } from "../../redux/actions";
 import "./login.css";
-import * as routes from "../../Constants/routes";
+import * as routes from "../../constants/routes";
 
 const INITIAL_STATE = {
   email: "",
@@ -26,25 +28,32 @@ class Login extends Component {
   onSubmit = (event) => {
     const { email, password } = this.state;
 
-    const { history, firebase } = this.props;
+    const { loginUser } = this.props;
 
-    firebase
-      .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
-        this.setState(() => ({ ...INITIAL_STATE }));
-        history.push(routes.MAIN);
-      })
-      .catch((error) => {
-        this.setState(updateByPropertyName("error", error));
-      });
+    // firebase
+    //   .doSignInWithEmailAndPassword(email, password)
+    //   .then(() => {
+    //     this.setState(() => ({ ...INITIAL_STATE }));
+    //     history.push(routes.MAIN);
+    //   })
+    //   .catch((error) => {
+    //     this.setState(updateByPropertyName("error", error));
+    //   });
+
+    loginUser(email, password);
 
     event.preventDefault();
   };
 
   render() {
     const { email, password, error } = this.state;
-
+    const { authUser, authenticated } = this.props;
     const isInvalid = password === "" || email === "";
+
+    if (authenticated && !isEmpty(authUser)) {
+      return <Redirect to={routes.LANDING} />;
+    }
+
     return (
       <div className="container-fluid">
         <div className="login-form">
@@ -56,7 +65,10 @@ class Login extends Component {
               <div className="form-group">
                 <input
                   value={email}
-                  onChange={event => this.setState(updateByPropertyName("email", event.target.value))
+                  onChange={(event) =>
+                    this.setState(
+                      updateByPropertyName("email", event.target.value)
+                    )
                   }
                   type="email"
                   className="form-control"
@@ -68,7 +80,10 @@ class Login extends Component {
               <div className="form-group">
                 <input
                   value={password}
-                  onChange={event => this.setState(updateByPropertyName("password", event.target.value))
+                  onChange={(event) =>
+                    this.setState(
+                      updateByPropertyName("password", event.target.value)
+                    )
                   }
                   type="password"
                   className="form-control"
@@ -79,7 +94,11 @@ class Login extends Component {
               <div className="forgot">
                 <a href="#">Forgot password?</a>
               </div>
-              <button disabled={isInvalid} type="submit" className="btn btn-primary">
+              <button
+                disabled={isInvalid}
+                type="submit"
+                className="btn btn-primary"
+              >
                 Login
               </button>
               <SignUpLink />
@@ -95,14 +114,20 @@ class Login extends Component {
 const SignUpLink = () => (
   <div className="toSignup">
     <p>
-      Don't have an account?
-      {" "}
-      <Link to={routes.SIGN_UP}>Sign Up</Link>
+      Don't have an account? <Link to={routes.SIGN_UP}>Sign Up</Link>
     </p>
   </div>
 );
 
-export const LoginPage = compose(
-  withRouter,
-  withFirebase,
-)(Login);
+const mapStateToProps = ({ user, auth }) => ({
+  authUser: auth.authUser,
+  authenticated: auth.authenticated,
+  er_loginUser: auth.er_loginUser,
+});
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ loginUser }, dispatch);
+export const LoginPage = withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Login)
+);
+
+// export const LoginPage = compose(withRouter, withFirebase)(Login);

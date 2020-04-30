@@ -3,7 +3,7 @@ export * from "./ChatBox";
 export * from "./ChatIncoming";
 export * from "./ChatInput";
 export * from "./ChatOutgoing";
-export * from "./SearchBox";
+export * from "./Header";
 export * from "./Sidebar";
 export * from "./UserItem";
 export * from "./UserList";

@@ -1,72 +1,61 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { compose } from "recompose";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { isEmpty } from "lodash";
+import { userListener, selectUser } from "../redux/actions";
 import { UserItem } from ".";
-import { withFirebase } from "../Firebase";
-
-// const updateByPropertyName = (propertyName, value) => () => ({
-//   [propertyName]: value,
-// });
+import { AuthService, UserService, MessageService } from "../services/firebase";
 
 export class UserListComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      users: [],
-      isActiveUser: "",
-    };
+    this.state = {};
   }
 
   componentWillMount() {
-    const { firebase } = this.props;
-    // this.setAuthUser();
-    const ref = firebase.db.ref("users");
-    ref.on("value", (usersnapshot) => {
-      const newUsers = [];
-      usersnapshot.forEach((snapshot) => {
-        const { key } = snapshot;
-        const val = snapshot.val();
-        newUsers.push({
-          userId: key,
-          username: val.username,
-          email: val.email,
-        });
-        //        console.log(key + "," + val["username"] + "," + val["email"]);
-      });
-      this.setState({ users: newUsers });
-    });
+    const { userListener } = this.props;
+    userListener();
   }
 
-  handleClick = (userId) => {
-    const { getActiveUser } = this.props;
-    this.setState({ isActiveUser: userId });
-    getActiveUser(userId);
+  handleClick = (user) => {
+    const { selectUser } = this.props;
+    selectUser(user);
   };
 
   render() {
-    const { users, isActiveUser } = this.state;
-    const { authUser } = this.props;
+    const { authUser, userList, selectedUser } = this.props;
+    const filteredUserList = userList.filter(
+      (user) => authUser.uid !== user.userId
+    );
 
     return (
       <div className="inbox_chat">
-        {users.map(user => (
-          <React.Fragment>
-            {authUser.uid !== user.userId && (
-              <UserItem
-                key={user.userId}
-                userId={user.userId}
-                username={user.username}
-                email={user.email}
-                isActive={user.userId === isActiveUser}
-                onItemClick={this.handleClick}
-              />
-            )}
-          </React.Fragment>
+        {filteredUserList.map((user) => (
+          <UserItem
+            key={user.userId}
+            username={user.username}
+            email={user.email}
+            isActive={user.userId === selectedUser.userId}
+            onItemClick={() => this.handleClick(user)}
+          />
         ))}
       </div>
     );
   }
 }
 
-export const UserList = compose(withFirebase)(UserListComponent);
+const mapStateToProps = ({ user, auth }) => ({
+  authUser: auth.authUser,
+  userList: user.userList,
+  selectedUser: user.selectedUser,
+});
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ userListener, selectUser }, dispatch);
+
+export const UserList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UserListComponent);
